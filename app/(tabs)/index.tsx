@@ -59,7 +59,7 @@ export default function HomeScreen() {
             </Link.Menu>
           </Link.Menu>
         </Link>
-
+ 
         <ThemedText>
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </ThemedText>
@@ -96,3 +96,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+// Monsth0r is watching you...
