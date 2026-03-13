@@ -23,7 +23,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/Vonk_E-racing_logo-small.jpeg" //pas dit aan als je een andere favicon wilt gebruiken / het icoontje wat op de tab word laten zien
     },
     "plugins": [
       "expo-router",
