@@ -9,7 +9,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Hallo.</Text>
+      <Text>Vonk E-racing</Text>
     </View>
   );
 }
+  
