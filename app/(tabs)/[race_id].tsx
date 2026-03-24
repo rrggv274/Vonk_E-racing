@@ -12,7 +12,6 @@ import {
   Alert,
   Animated,
   FlatList,
-  Image,
   Modal,
   Platform,
   Pressable,
@@ -23,7 +22,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { useTheme } from '../../src/context/ThemeContext'
 import { supabase } from '../../src/utils/supabase'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -47,53 +45,26 @@ type SortMode = 'lap' | 'fastest'
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
 
-const darkTheme = {
-  bg: '#121421',
-  surface: '#1d2235',
-  card: '#232a42',
-  border: '#2e3562',
-  accent: '#FFD700',
-  accent2: '#FFA500',
-  accent3: '#FF1493',
-  fastest: '#FFA500',
-  fastestBg: '#FFA50020',
-  slowest: '#FF1493',
-  slowestBg: '#FF149320',
-  best: '#FFD700',
-  textPrimary: '#EDEEF6',
-  textSecondary: '#A9B0D9',
-  textMuted: '#7f88af',
-  positive: '#FFA500',
-  negative: '#FF1493',
-  neutral: '#A9B0D9',
-  delete: '#FF1493',
-  edit: '#FFD700',
+const C = {
+  bg: '#0b0c10',
+  surface: '#13151a',
+  card: '#1a1d24',
+  border: '#252830',
+  accent: '#e8ff00',
+  fastest: '#00e676',
+  fastestBg: '#00e67614',
+  slowest: '#ff3d5a',
+  slowestBg: '#ff3d5a14',
+  best: '#ffd600',
+  textPrimary: '#f0f2f5',
+  textSecondary: '#6b7280',
+  textMuted: '#3d4049',
+  positive: '#00e676',
+  negative: '#ff3d5a',
+  neutral: '#6b7280',
+  delete: '#ff3d5a',
+  edit: '#60a5fa',
 }
-
-const lightTheme = {
-  bg: '#f4f7ff',
-  surface: '#ffffff',
-  card: '#f8f9ff',
-  border: '#d7dcf3',
-  accent: '#FFD700',
-  accent2: '#FFA500',
-  accent3: '#FF1493',
-  fastest: '#FFA500',
-  fastestBg: '#FFF0D4',
-  slowest: '#FF1493',
-  slowestBg: '#FFE2F3',
-  best: '#FFD700',
-  textPrimary: '#1f2a4d',
-  textSecondary: '#5e6b9d',
-  textMuted: '#8a94b4',
-  positive: '#FFA500',
-  negative: '#FF1493',
-  neutral: '#6d79a5',
-  delete: '#FF1493',
-  edit: '#FFD700',
-}
-
-const C = darkTheme
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -167,11 +138,6 @@ const mS = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.border,
     alignItems: 'center',
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
   },
   icon: { fontSize: 36, marginBottom: 12 },
   title: {
@@ -201,12 +167,7 @@ const mS = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.border,
     alignItems: 'center',
-    backgroundColor: C.surface,
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: C.card,
   },
   cancelText: { color: C.textSecondary, fontWeight: '700', fontSize: 14 },
   confirmBtn: {
@@ -215,11 +176,6 @@ const mS = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: C.delete,
     alignItems: 'center',
-    shadowColor: C.delete,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
   },
   confirmText: { color: '#fff', fontWeight: '900', fontSize: 14 },
 })
@@ -309,11 +265,6 @@ const eS = StyleSheet.create({
     paddingBottom: 40,
     borderTopWidth: 1,
     borderColor: C.border,
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
   },
   handle: {
     width: 40,
@@ -349,11 +300,7 @@ const eS = StyleSheet.create({
     fontSize: 16,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     fontWeight: '600',
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 16,
   },
   btnRow: { flexDirection: 'row', gap: 12, marginTop: 4 },
   cancelBtn: {
@@ -363,12 +310,7 @@ const eS = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.border,
     alignItems: 'center',
-    backgroundColor: C.surface,
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: C.card,
   },
   cancelText: { color: C.textSecondary, fontWeight: '700', fontSize: 14 },
   saveBtn: {
@@ -377,11 +319,6 @@ const eS = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: C.edit,
     alignItems: 'center',
-    shadowColor: C.edit,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
   },
   saveBtnDisabled: { backgroundColor: C.border },
   saveText: { color: '#fff', fontWeight: '900', fontSize: 14 },
@@ -390,10 +327,9 @@ const eS = StyleSheet.create({
 // ─── Main (Racing) Screen ─────────────────────────────────────────────────────
 
 export default function StatsScreen() {
-  const { darkMode, toggleDarkMode } = useTheme()
-  const theme = darkMode ? darkTheme : lightTheme
   const { race_id } = useLocalSearchParams()
   const raceId = parseInt(race_id as string)
+  const raceValid = !isNaN(raceId) && raceId > 0
 
   const [times, setTimes] = useState<TimeEntry[]>([])
   const [kartInput, setKartInput] = useState('')
@@ -403,19 +339,24 @@ export default function StatsScreen() {
   const [deleteTarget, setDeleteTarget] = useState<TimeEntry | null>(null)
   const [editTarget, setEditTarget] = useState<TimeEntry | null>(null)
   const [loading, setLoading] = useState(true)
-  const [settingsOpen, setSettingsOpen] = useState(false)
-
-  const toggleSettings = () => setSettingsOpen((prev) => !prev)
 
   const flashAnim = useRef(new Animated.Value(0)).current
 
   // ── Initialize on mount ──────────────────────────────────────────────────
 
   useEffect(() => {
-    if (raceId) {
+    if (raceValid) {
       fetchTimes()
     }
-  }, [raceId])
+  }, [raceValid])
+
+  if (!raceValid) {
+    return (
+      <View style={s.container}>
+        <Text style={{ color: C.textPrimary }}>Ongeldige race ID</Text>
+      </View>
+    )
+  }
 
   async function fetchTimes() {
     const { data, error } = await supabase
@@ -425,8 +366,7 @@ export default function StatsScreen() {
       .order('created_at', { ascending: true })
 
     if (error) {
-      console.error('Error fetching times:', error);
-      Alert.alert('Error', `Kon tijden niet laden: ${error.message}`);
+      Alert.alert('Error', error.message)
     } else {
       setTimes(data ?? [])
     }
@@ -545,15 +485,15 @@ export default function StatsScreen() {
     const isSlowest = sec === slowestSec && times.length > 1
     const isBestForKart = sec === bestPerKart[item.kart]
     const delta = getDelta(item)
-    const rowBg = isFastest ? theme.fastestBg : isSlowest ? theme.slowestBg : undefined
-    const timeColor = isFastest ? theme.fastest : isSlowest ? theme.slowest : theme.textPrimary
+    const rowBg = isFastest ? C.fastestBg : isSlowest ? C.slowestBg : undefined
+    const timeColor = isFastest ? C.fastest : isSlowest ? C.slowest : C.textPrimary
     const deltaColor =
-      delta === null ? theme.neutral : delta < 0 ? theme.positive : delta > 0 ? theme.negative : theme.neutral
+      delta === null ? C.neutral : delta < 0 ? C.positive : delta > 0 ? C.negative : C.neutral
 
     return (
-      <View style={[s.row, { backgroundColor: theme.surface, borderColor: theme.border }, rowBg ? { backgroundColor: rowBg } : null]}>
+      <View style={[s.row, rowBg ? { backgroundColor: rowBg } : null]}>
         <View style={s.lapCell}>
-          <Text style={[s.lapLabel, { color: theme.textSecondary }]}>RND</Text>
+          <Text style={s.lapLabel}>RND</Text>
           <Text style={s.lapNumber}>{item.lap}</Text>
         </View>
 
@@ -613,16 +553,16 @@ export default function StatsScreen() {
       </View>
       <View style={s.legend}>
         <View style={s.legendItem}>
-          <View style={[s.legendDot, { backgroundColor: theme.fastest }]} />
-          <Text style={[s.legendText, { color: theme.textSecondary }]}>Snelste</Text>
+          <View style={[s.legendDot, { backgroundColor: C.fastest }]} />
+          <Text style={s.legendText}>Snelste</Text>
         </View>
         <View style={s.legendItem}>
-          <View style={[s.legendDot, { backgroundColor: theme.slowest }]} />
-          <Text style={[s.legendText, { color: theme.textSecondary }]}>Traagste</Text>
+          <View style={[s.legendDot, { backgroundColor: C.slowest }]} />
+          <Text style={s.legendText}>Traagste</Text>
         </View>
         <View style={s.legendItem}>
-          <Text style={{ color: theme.best, fontSize: 11 }}>★</Text>
-          <Text style={[s.legendText, { color: theme.textSecondary }]}>Beste / kart</Text>
+          <Text style={{ color: C.best, fontSize: 11 }}>★</Text>
+          <Text style={s.legendText}>Beste / kart</Text>
         </View>
       </View>
     </View>
@@ -631,35 +571,15 @@ export default function StatsScreen() {
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <View style={[s.container, { backgroundColor: theme.bg }] }>
-      <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} backgroundColor={theme.bg} />
+    <View style={s.container}>
+      <StatusBar barStyle="light-content" backgroundColor={C.bg} />
 
-      <View style={s.toolbar}>
-        <TouchableOpacity onPress={toggleSettings} style={[s.settingsBtn, darkMode && s.settingsBtnDark]}>
-          <Text style={[s.settingsBtnText, darkMode && s.settingsBtnTextDark]}>⚙️</Text>
-        </TouchableOpacity>
-      </View>
-
-      {settingsOpen && (
-        <View style={[s.dropdown, darkMode && s.dropdownDark]}>
-          <TouchableOpacity onPress={() => { toggleDarkMode(); setSettingsOpen(false) }} style={s.dropdownItem}>
-            <Text style={[s.dropdownText, darkMode && s.dropdownTextDark]}>
-              {darkMode ? 'Schakel lichtmodus' : 'Schakel darkmode'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { /* to be wired for login/logout */ }} style={[s.dropdownItem, s.dropdownItemMuted]}>
-            <Text style={[s.dropdownText, darkMode && s.dropdownTextDark]}>Inloggen / Uitloggen (later)</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      <Image source={require('../../assets/images/Vonk_E-racing_logo.png')} style={s.logo} />
-
+      {/* Title bar */}
       <View style={s.titleBar}>
-        <Text style={[s.title, { color: theme.textPrimary }]}>
+        <Text style={s.title}>
           🏁 LAP TIMER
         </Text>
-        <Text style={[s.titleCount, { color: theme.textSecondary }]}>
+        <Text style={s.titleCount}>
           {times.length} {times.length === 1 ? 'ronde' : 'rondes'}
         </Text>
       </View>
@@ -681,11 +601,11 @@ export default function StatsScreen() {
               <Text style={s.fieldLabel}>Kart #</Text>
               <TextInput
                 placeholder="bv. 10"
-                placeholderTextColor={theme.textMuted}
+                placeholderTextColor={C.textMuted}
                 value={kartInput}
                 onChangeText={setKartInput}
                 keyboardType="numeric"
-                style={[s.textInput, { backgroundColor: theme.card, borderColor: theme.border, color: theme.textPrimary }]}
+                style={s.textInput}
               />
             </View>
 
@@ -695,10 +615,10 @@ export default function StatsScreen() {
               <Text style={s.fieldLabel}>Ronde Tijd</Text>
               <TextInput
                 placeholder="bv. 1:32.45"
-                placeholderTextColor={theme.textMuted}
+                placeholderTextColor={C.textMuted}
                 value={timeInput}
                 onChangeText={setTimeInput}
-                style={[s.textInput, { backgroundColor: theme.card, borderColor: theme.border, color: theme.textPrimary }]}
+                style={s.textInput}
               />
             </View>
 
@@ -747,7 +667,7 @@ export default function StatsScreen() {
       {/* List */}
       {loading ? (
         <View style={s.emptyState}>
-          <Text style={s.emptyText}>Laden...</Text> 
+          <Text style={s.emptyText}>Laden...</Text>
         </View>
       ) : times.length === 0 ? (
         <View style={s.emptyState}>
@@ -790,31 +710,36 @@ const s = StyleSheet.create({
     flex: 1,
     backgroundColor: C.bg,
     paddingTop: Platform.OS === 'android' ? 40 : 52,
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
   },
   titleBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     marginBottom: 16,
+    gap: 8,
+    justifyContent: 'space-between',
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '900',
     color: C.textPrimary,
+    letterSpacing: 2,
+    fontFamily:
+      Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-condensed',
   },
   titleCount: {
-    fontSize: 13,
+    fontSize: 12,
     color: C.textSecondary,
     fontWeight: '600',
+    letterSpacing: 0.5,
   },
   form: {
-    backgroundColor: C.card,
-    borderRadius: 12,
+    backgroundColor: C.surface,
+    borderRadius: 14,
+    padding: 14,
     borderWidth: 1,
     borderColor: C.border,
-    padding: 14,
-    marginBottom: 14,
+    marginBottom: 12,
   },
   formRow: {
     flexDirection: 'row',
@@ -840,11 +765,6 @@ const s = StyleSheet.create({
     fontSize: 15,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     fontWeight: '600',
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
   },
   nextLapBadgeWrapper: { marginLeft: 10, alignItems: 'center' },
   nextLapBadge: {
@@ -856,11 +776,6 @@ const s = StyleSheet.create({
     paddingVertical: 11,
     minWidth: 52,
     alignItems: 'center',
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
   },
   nextLapText: {
     color: C.accent,
@@ -874,11 +789,6 @@ const s = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 13,
     alignItems: 'center',
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
   },
   saveBtnDisabled: { backgroundColor: C.border },
   saveBtnText: {
@@ -896,11 +806,6 @@ const s = StyleSheet.create({
     borderColor: C.border,
     alignItems: 'center',
     backgroundColor: C.surface,
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
   },
   sortBtnActive: {
     borderColor: C.accent,
@@ -986,11 +891,6 @@ const s = StyleSheet.create({
     paddingVertical: 3,
     borderWidth: 1,
     borderColor: C.border,
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 1,
   },
   kartBadgeText: {
     color: C.textPrimary,
@@ -1017,11 +917,6 @@ const s = StyleSheet.create({
     backgroundColor: C.edit + '18',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: C.edit,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 2,
   },
   editBtnText: { color: C.edit, fontSize: 14, fontWeight: '700' },
   deleteBtn: {
@@ -1031,11 +926,6 @@ const s = StyleSheet.create({
     backgroundColor: C.delete + '18',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: C.delete,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 2,
   },
   deleteBtnText: { color: C.delete, fontSize: 11, fontWeight: '800' },
   emptyState: {
@@ -1051,103 +941,5 @@ const s = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     letterSpacing: 0.5,
-  },
-  logo: {
-    width: 200,
-    height: 100,
-    alignSelf: 'center',
-    marginBottom: 10,
-    resizeMode: 'contain',
-  },
-  toolbar: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 10,
-  },
-  settingsBtn: {
-    backgroundColor: '#1f2a4d',
-    borderRadius: 999,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: C.border,
-  },
-  settingsBtnDark: {
-    backgroundColor: '#19203b',
-    borderColor: '#FFA500',
-  },
-  settingsBtnText: {
-    color: C.accent,
-    fontSize: 16,
-  },
-  settingsBtnTextDark: {
-    color: C.accent,
-  },
-  dropdown: {
-    width: 220,
-    backgroundColor: C.card,
-    borderWidth: 1,
-    borderColor: C.border,
-    borderRadius: 10,
-    marginBottom: 12,
-    paddingVertical: 8,
-  },
-  dropdownDark: {
-    backgroundColor: '#1b2136',
-    borderColor: '#2d3b5f',
-  },
-  dropdownItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-  },
-  dropdownItemMuted: {
-    opacity: 0.8,
-  },
-  dropdownText: {
-    color: C.textPrimary,
-    fontSize: 14,
-  },
-  dropdownTextDark: {
-    color: '#f0f4ff',
-  },
-  headerRow: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginBottom: 10,
-  },
-  headerText: {
-    marginRight: 8,
-    fontSize: 20,
-    color: '#7f8ca7',
-  },
-  settingsButton: {
-    backgroundColor: '#FFF',
-    borderRadius: 999,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: '#FFD700',
-  },
-  settingsText: {
-    fontSize: 16,
-    color: '#FF1493',
-  },
-  containerDark: {
-    backgroundColor: '#0b0c10',
-  },
-  titleDark: {
-    color: '#fff',
-  },
-  titleCountDark: {
-    color: '#d1d1d1',
-  },
-  headerTextDark: {
-    color: '#fff',
-  },
-  settingsButtonDark: {
-    backgroundColor: '#1a1d24',
-    borderColor: '#FFA500',
-  },
-  settingsTextDark: {
-    color: '#FFD700',
   },
 })
